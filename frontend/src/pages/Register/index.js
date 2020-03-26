@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 import logoImg from "../../assets/logo.svg";
@@ -14,6 +14,8 @@ export default function Register() {
   const [city, setCity] = useState("");
   const [uf, setUf] = useState("");
 
+  const history = useHistory();
+
   async function handleRegister(e) {
     e.preventDefault();
     const data = {
@@ -27,8 +29,13 @@ export default function Register() {
     try {
       console.log(JSON.stringify(data));
 
-      const response = await api.post("ongs", JSON.stringify(data));
+      const response = await api.post("ongs", JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
       alert(`Seu id de acesso ${response.data.id}`);
+      history.push("/");
     } catch (err) {
       alert("Erro no cadastro, tente novamente");
     }
